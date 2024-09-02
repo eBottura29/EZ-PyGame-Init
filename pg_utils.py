@@ -40,15 +40,11 @@ def manage_frame_rate(clock, get_ticks_last_frame):
 
 
 def draw_circle(screen, color, position, radius):
-    pygame.draw.circle(
-        screen, color.get_tup(), (int(position.x), int(position.y)), radius
-    )
+    pygame.draw.circle(screen, color.get_tup(), (int(position.x), int(position.y)), radius)
 
 
 def draw_rectangle(screen, color, position, size):
-    pygame.draw.rect(
-        screen, color.get_tup(), pygame.Rect(position.x, position.y, size.x, size.y)
-    )
+    pygame.draw.rect(screen, color.get_tup(), pygame.Rect(position.x, position.y, size.x, size.y))
 
 
 def draw_line(screen, color, start_pos, end_pos, width=1):
@@ -59,84 +55,6 @@ def draw_line(screen, color, start_pos, end_pos, width=1):
         (int(end_pos.x), int(end_pos.y)),
         width,
     )
-
-
-class Text:
-    def __init__(
-        self,
-        text,
-        font,
-        color,
-        position,
-        anti_aliasing=True,
-        background=False,
-        bg_color=(0, 0, 0),
-    ):
-        """The Text class does not accept vectors or color objects as args"""
-
-        self.text = text
-        self.font = font
-        self.color = color
-        self.position = position
-        self.anti_aliasing = anti_aliasing
-        self.background = background
-        self.bg_color = bg_color
-
-        self.center = 0
-        self.bottom = 1
-        self.bottom_left = 2
-        self.bottom_right = 3
-        self.mid_bottom = 4
-        self.mid_left = 5
-        self.mid_right = 6
-        self.mid_top = 7
-        self.top = 8
-        self.top_left = 9
-        self.top_right = 10
-        self.left = 11
-        self.right = 12
-
-    def draw(self, surface, anchor=None):
-        if anchor == None:
-            anchor = self.center
-
-        if not self.background:
-            self.text = self.font.render(self.text, self.anti_aliasing, self.color)
-        elif self.background:
-            self.text = self.font.render(
-                self.text, self.anti_aliasing, self.color, self.bg_color
-            )
-
-        self.text_rect = self.text.get_rect()
-
-        if anchor == self.center:
-            self.text_rect.center = (self.position[0], self.position[1])
-        if anchor == self.bottom:
-            self.text_rect.bottom = (self.position[0], self.position[1])
-        if anchor == self.bottom_left:
-            self.text_rect.bottomleft = (self.position[0], self.position[1])
-        if anchor == self.bottom_right:
-            self.text_rect.bottomright = (self.position[0], self.position[1])
-        if anchor == self.mid_bottom:
-            self.text_rect.midbottom = (self.position[0], self.position[1])
-        if anchor == self.mid_left:
-            self.text_rect.midleft = (self.position[0], self.position[1])
-        if anchor == self.mid_right:
-            self.text_rect.midright = (self.position[0], self.position[1])
-        if anchor == self.mid_top:
-            self.text_rect.midtop = (self.position[0], self.position[1])
-        if anchor == self.top:
-            self.text_rect.top = (self.position[0], self.position[1])
-        if anchor == self.top_left:
-            self.text_rect.topleft = (self.position[0], self.position[1])
-        if anchor == self.top_right:
-            self.text_rect.topright = (self.position[0], self.position[1])
-        if anchor == self.left:
-            self.text_rect.left = (self.position[0], self.position[1])
-        if anchor == self.right:
-            self.text_rect.right = (self.position[0], self.position[1])
-
-        surface.blit(self.text, self.text_rect)
 
 
 class Color:
@@ -162,9 +80,7 @@ class Color:
 
     @staticmethod
     def random():
-        return Color(
-            random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-        )
+        return Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     def blend(self, other, ratio=0.5):
         r = int(self.r * ratio + other.r * (1 - ratio))
@@ -185,11 +101,7 @@ class Color:
             h = s = 0
         else:
             diff = max_color - min_color
-            s = (
-                diff / (2 - max_color - min_color)
-                if l > 0.5
-                else diff / (max_color + min_color)
-            )
+            s = diff / (2 - max_color - min_color) if l > 0.5 else diff / (max_color + min_color)
             if max_color == r:
                 h = (g - b) / diff + (6 if g < b else 0)
             elif max_color == g:
@@ -239,7 +151,7 @@ class Vector2:
         return Vector2(self.x + dx, self.y + dy)
 
     def get_tup(self):
-        return self.x, self.y, self.z
+        return self.x, self.y
 
     def __add__(self, other):
         return Vector2(self.x + other.x, self.y + other.y)
@@ -250,16 +162,12 @@ class Vector2:
     def __mul__(self, other):
         if isinstance(other, (int, float)):
             return Vector2(self.x * other, self.y * other)
-        raise TypeError(
-            "Unsupported operand type(s) for *: 'Vector2' and '{}'".format(type(other))
-        )
+        raise TypeError("Unsupported operand type(s) for *: 'Vector2' and '{}'".format(type(other)))
 
     def __div__(self, other):
         if isinstance(other, (int, float)):
             return Vector2(self.x / other, self.y / other)
-        raise TypeError(
-            "Unsupported operand type(s) for /: 'Vector2' and '{}'".format(type(other))
-        )
+        raise TypeError("Unsupported operand type(s) for /: 'Vector2' and '{}'".format(type(other)))
 
     def __repr__(self) -> str:
         return f"X: {self.x}, Y: {self.y}"
@@ -303,11 +211,7 @@ class Vector3:
         cos_theta, sin_theta = math.cos(rad), math.sin(rad)
         cross_prod = self.cross(axis)
         dot_prod = self.dot(axis)
-        return (
-            self.scale(cos_theta)
-            + cross_prod.scale(sin_theta)
-            + axis.scale(dot_prod * (1 - cos_theta))
-        )
+        return self.scale(cos_theta) + cross_prod.scale(sin_theta) + axis.scale(dot_prod * (1 - cos_theta))
 
     def scale(self, factor):
         return Vector3(self.x * factor, self.y * factor, self.z * factor)
@@ -321,34 +225,26 @@ class Vector3:
     def __add__(self, other):
         if isinstance(other, Vector3):
             return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
-        raise TypeError(
-            "Unsupported operand type(s) for +: 'Vector3' and '{}'".format(type(other))
-        )
+        raise TypeError("Unsupported operand type(s) for +: 'Vector3' and '{}'".format(type(other)))
 
     def __sub__(self, other):
         if isinstance(other, Vector3):
             return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
-        raise TypeError(
-            "Unsupported operand type(s) for -: 'Vector3' and '{}'".format(type(other))
-        )
+        raise TypeError("Unsupported operand type(s) for -: 'Vector3' and '{}'".format(type(other)))
 
     def __mul__(self, other):
         if isinstance(other, (int, float)):
             return Vector3(self.x * other, self.y * other, self.z * other)
         elif isinstance(other, Vector3):
             return Vector3(self.x * other.x, self.y * other.y, self.z * other.z)
-        raise TypeError(
-            "Unsupported operand type(s) for *: 'Vector3' and '{}'".format(type(other))
-        )
+        raise TypeError("Unsupported operand type(s) for *: 'Vector3' and '{}'".format(type(other)))
 
     def __div__(self, other):
         if isinstance(other, (int, float)):
             return Vector3(self.x / other, self.y / other, self.z / other)
         elif isinstance(other, Vector3):
             return Vector3(self.x / other.x, self.y / other.y, self.z / other.z)
-        raise TypeError(
-            "Unsupported operand type(s) for /: 'Vector3' and '{}'".format(type(other))
-        )
+        raise TypeError("Unsupported operand type(s) for /: 'Vector3' and '{}'".format(type(other)))
 
     def __repr__(self) -> str:
         return f"X: {self.x}, Y: {self.y}, Z: {self.z}"
@@ -363,3 +259,142 @@ class Vector3:
         self.RIGHT = Vector3(1, 0, 0)
         self.FORWARD = Vector3(0, 0, 1)
         self.BACK = Vector3(0, 0, -1)
+
+
+class Text:
+    def __init__(
+        self,
+        text: str = "Text",
+        font: pygame.font.Font = None,
+        color: Color = Color(0, 0, 0),
+        position: Vector2 = Vector2,
+        anti_aliasing: bool = True,
+        background: bool = False,
+        bg_color: Color = Color(0, 0, 0),
+    ):
+        self.text = text
+        self.font = font
+        self.color = color
+        self.position = position
+        self.anti_aliasing = anti_aliasing
+        self.background = background
+        self.bg_color = bg_color
+
+        self.center = 0
+        self.bottom = 1
+        self.bottom_left = 2
+        self.bottom_right = 3
+        self.mid_bottom = 4
+        self.mid_left = 5
+        self.mid_right = 6
+        self.mid_top = 7
+        self.top = 8
+        self.top_left = 9
+        self.top_right = 10
+        self.left = 11
+        self.right = 12
+
+    def draw(self, surface: pygame.surface.Surface = None, anchor: int = 0):
+        """Use Text.anchors as an anchor (Text.center or Text.mid_left for example)"""
+
+        if not self.background:
+            self.text = self.font.render(self.text, self.anti_aliasing, self.color.get_tup())
+        elif self.background:
+            self.text = self.font.render(self.text, self.anti_aliasing, self.color.get_tup(), self.bg_color)
+
+        self.text_rect = self.text.get_rect()
+
+        if anchor == self.center:
+            self.text_rect.center = self.position.get_tup()
+        if anchor == self.bottom:
+            self.text_rect.bottom = self.position.get_tup()
+        if anchor == self.bottom_left:
+            self.text_rect.bottomleft = self.position.get_tup()
+        if anchor == self.bottom_right:
+            self.text_rect.bottomright = self.position.get_tup()
+        if anchor == self.mid_bottom:
+            self.text_rect.midbottom = self.position.get_tup()
+        if anchor == self.mid_left:
+            self.text_rect.midleft = self.position.get_tup()
+        if anchor == self.mid_right:
+            self.text_rect.midright = self.position.get_tup()
+        if anchor == self.mid_top:
+            self.text_rect.midtop = self.position.get_tup()
+        if anchor == self.top:
+            self.text_rect.top = self.position.get_tup()
+        if anchor == self.top_left:
+            self.text_rect.topleft = self.position.get_tup()
+        if anchor == self.top_right:
+            self.text_rect.topright = self.position.get_tup()
+        if anchor == self.left:
+            self.text_rect.left = self.position.get_tup()
+        if anchor == self.right:
+            self.text_rect.right = self.position.get_tup()
+
+        surface.blit(self.text, self.text_rect)
+
+
+class Button:
+    def __init__(
+        self,
+        text: str = "Button",
+        text_color: Color = Color(0, 0, 0),
+        font: pygame.font.Font = None,
+        position: Vector2 = Vector2(),
+        scale: Vector2 = Vector2(200, 100),
+        color: Color = Color(),
+        hover_color: Color = Color(200, 200, 200),
+        click_color: Color = Color(128, 128, 128),
+        outline: bool = False,
+        outline_width: int = 2,
+        outline_color: Color = Color(0, 0, 0),
+        onclick=None,
+        hold: bool = False,
+    ):
+        self.text = text
+        self.text_color = text_color
+        self.font = font
+        self.position = position
+        self.scale = scale
+        self.color = color
+        self.click_color = click_color
+        self.hover_color = hover_color
+        self.outline = outline
+        self.outline_width = outline_width
+        self.outline_color = outline_color
+        self.onclick = onclick
+        self.hold = hold
+        self.desired_color = self.color
+        self.pressed_once = False
+
+    def button(self):
+        mouse_pos = pygame.mouse.get_pos()
+
+        if mouse_pos[0] > self.position.x and mouse_pos[0] < self.position.x + self.scale.x:
+            if mouse_pos[1] > self.position.y and mouse_pos[1] < self.position.y + self.scale.y:
+                self.desired_color = self.hover_color
+
+                mouse_state = pygame.mouse.get_pressed()
+                pressed = mouse_state[0]
+
+                if pressed:
+                    self.desired_color = self.click_color
+                    if not self.pressed_once:
+                        if self.onclick is not None:
+                            self.onclick()
+                        self.pressed_once = True
+                else:
+                    self.pressed_once = False
+        else:
+            self.desired_color = self.color
+
+    def draw(self, surface: pygame.surface.Surface = None):
+        rect = pygame.Rect(self.position.x, self.position.y, self.scale.x, self.scale.y)
+
+        pygame.draw.rect(surface, self.desired_color.get_tup(), rect)
+
+        if self.outline:
+            pygame.draw.rect(surface, self.outline_color.get_tup(), rect, self.outline_width)
+
+        text = Text(self.text, self.font, self.text_color, Vector2(self.position.x + self.scale.x // 2, self.position.y + self.scale.y // 2))
+        text.draw(surface, text.center)

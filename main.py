@@ -1,9 +1,9 @@
-###########
-# MAIN.PY #
-###########
-
 import pygame
 from pg_utils import *
+
+#########
+# SETUP #
+#########
 
 # Vector2 Setup
 vector2 = Vector2()
@@ -26,8 +26,11 @@ pygame.display.set_caption(WINDOW_NAME)
 
 clock = pygame.time.Clock()
 delta_time = 0.0
+font = pygame.font.SysFont("Arial", 32)
 
-# FUNCTIONS AND CLASSES HERE
+#############
+# END SETUP #
+#############
 
 
 def main():
@@ -50,9 +53,7 @@ def main():
 
         pygame.display.flip()
 
-        get_ticks_last_frame, delta_time = manage_frame_rate(
-            clock, get_ticks_last_frame
-        )
+        get_ticks_last_frame, delta_time = manage_frame_rate(clock, get_ticks_last_frame)
 
     pygame.quit()
 
