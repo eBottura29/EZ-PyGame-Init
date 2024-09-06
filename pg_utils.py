@@ -338,3 +338,31 @@ class Vector3:
 
     def __repr__(self) -> str:
         return f"X: {self.x}, Y: {self.y}, Z: {self.z}"
+
+
+class Rect:
+    def __init__(self, position: Vector2, scale: Vector2):
+        self.position = position
+        self.scale = scale
+
+
+class Circle:
+    def __init__(self, position: Vector2, radius: int):
+        self.position = position
+        self.radius = radius
+
+
+def rect_collision(rect1: Rect, rect2: Rect):
+    r1 = pygame.Rect(rect1.position.x - rect1.scale.x // 2, rect1.position.y - rect1.scale.y, rect1.scale.x, rect1.scale.y)
+    r2 = pygame.Rect(rect2.position.x - rect2.scale.x // 2, rect2.position.y - rect2.scale.y, rect2.scale.x, rect2.scale.y)
+    return pygame.Rect.colliderect(r1, r2)
+
+
+def circle_collsion(circle1: Circle, circle2: Circle):
+    dst = circle1.position - circle2.position
+    dst = dst.magnitude()
+
+    if dst > circle1.radius + circle2.radius:
+        return False
+
+    return True
