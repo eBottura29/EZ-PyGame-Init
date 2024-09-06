@@ -4,8 +4,11 @@ RESOLUTION = (2560, 1440)
 WIDTH, HEIGHT = RESOLUTION
 FPS = 165
 FULLSCREEN = True
-WINDOW_NAME = "PyGame Window"
+APP_VERSION = "1.0"
+APP_NAME = "My App"
 ICON_LOCATION = ""
+
+print(f"{APP_NAME} {APP_VERSION}")
 
 
 def timer(func):

@@ -21,8 +21,8 @@ colors.init_colors()
 pygame.init()
 
 SCREEN = pygame.display.set_mode(RESOLUTION, pygame.FULLSCREEN if FULLSCREEN else 0)
-pygame.display.set_caption(WINDOW_NAME)
-# pygame.display.set_icon(pygame.image.load(ICON_LOCATION))  # Uncomment if you have an icon
+pygame.display.set_caption(APP_NAME)
+# pygame.display.set_icon(pygame.image.load(ICON_LOCATION))  # Uncomment if an icon is present
 
 clock = pygame.time.Clock()
 delta_time = 0.0
