@@ -1,20 +1,10 @@
 TODO:
-1. collider class
-1.1. check collision between rects and circles
-2. sound manager
-3. camera class to manage zoom and scrolling in the window
-4. scene manager
-5. particle system
-6. grid and tilemap utils
-7. logging class with import logging
-8. other vector operations
-8.1 distance to, copy, clamp_magnitude functions
-9. config loader
-10. a* pathfinding
-11. network manager
-12. layered renderer class
-13. gradient func
-14. debugging tools
-15. fullscreen toggle func
-16. Bezier curve func
-17. screen shake class
+1. collision detection funcs
+1.1. check collision between rects, circles
+2. grid and tilemap utils
+3. logging class with import logging
+4. other vector operations
+4.1 distance to, copy, clamp_magnitude functions
+5. a* pathfinding
+6. layered renderer class
+7. gradient func

@@ -5,11 +5,10 @@ from pg_utils import *
 # SETUP #
 #########
 
-# Vector2 Setup
+# Vector2 and Vector3 Setup
 vector2 = Vector2()
 vector2.init_vectors()
 
-# Vector3 Setup
 vector3 = Vector3()
 vector3.init_vectors()
 
@@ -19,7 +18,6 @@ colors.init_colors()
 
 # PyGame Setup
 pygame.init()
-
 SCREEN = pygame.display.set_mode(RESOLUTION, pygame.FULLSCREEN if FULLSCREEN else 0)
 pygame.display.set_caption(APP_NAME)
 # pygame.display.set_icon(pygame.image.load(ICON_LOCATION))  # Uncomment if an icon is present
@@ -46,10 +44,6 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-
-        SCREEN.fill(colors.BLACK.get_tup())
-
-        # CODE HERE
 
         pygame.display.flip()
 
