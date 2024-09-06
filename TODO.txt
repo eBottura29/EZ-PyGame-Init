@@ -2,9 +2,6 @@ TODO (V = done, X = not done):
 1. collision detection funcs                        (V)
 1.1. check collision between rects, circles
 2. grid utils                                       (V)
-3. logging class with import logging                (X)
-4. other vector operations                          (X)
-4.1 distance to, copy, clamp_magnitude functions
-5. a* pathfinding                                   (X)
-6. layered renderer class                           (X)
-7. gradient func                                    (X)
+3. a* pathfinding                                   (X)
+4. layered renderer class                           (X)
+5. gradient func                                    (X)
