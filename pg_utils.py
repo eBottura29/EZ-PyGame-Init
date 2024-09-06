@@ -345,6 +345,9 @@ class Rect:
         self.position = position
         self.scale = scale
 
+    def get_pg_rect(self):
+        return self.position.x - self.scale.x // 2, self.position.y - self.scale.y // 2, self.scale.x, self.scale.y
+
 
 class Circle:
     def __init__(self, position: Vector2, radius: int):
@@ -352,10 +355,22 @@ class Circle:
         self.radius = radius
 
 
+class Grid:
+    def __init__(self, x, y, default_bg_color):
+        self.x, self.y = x, y
+        self.grid = [[default_bg_color for _ in range(y)] for _ in range(x)]
+
+    def draw(self, surface, color, border_width):
+        for x in range(len(self.grid)):
+            for y in range(len(self.grid[x])):
+                width = WIDTH / x
+                height = HEIGHT / y
+                pygame.draw.rect(surface, self.grid[x][y].get_tup(), pygame.Rect(x * width, y * height, width, height))
+                pygame.draw.rect(surface, color.get_tup(), pygame.Rect(x * width, y * height, width, height), border_width)
+
+
 def rect_collision(rect1: Rect, rect2: Rect):
-    r1 = pygame.Rect(rect1.position.x - rect1.scale.x // 2, rect1.position.y - rect1.scale.y, rect1.scale.x, rect1.scale.y)
-    r2 = pygame.Rect(rect2.position.x - rect2.scale.x // 2, rect2.position.y - rect2.scale.y, rect2.scale.x, rect2.scale.y)
-    return pygame.Rect.colliderect(r1, r2)
+    return pygame.Rect.colliderect(rect1.get_pg_rect(), rect2.get_pg_rect())
 
 
 def circle_collsion(circle1: Circle, circle2: Circle):
