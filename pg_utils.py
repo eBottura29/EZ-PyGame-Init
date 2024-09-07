@@ -4,9 +4,9 @@ import random
 import pygame
 
 # Screen Resolution and Setup Constants
-RESOLUTION = (2560, 1440)
+RESOLUTION = (1920, 1080)
 WIDTH, HEIGHT = RESOLUTION
-FPS = 165
+FPS = 60
 FULLSCREEN = True
 APP_VERSION = "1.0"
 APP_NAME = "My App"
@@ -14,6 +14,16 @@ ICON_LOCATION = ""
 
 # Print app name and version at the start
 print(f"{APP_NAME} {APP_VERSION}")
+
+# PyGame Setup
+pygame.init()
+SCREEN = pygame.display.set_mode(RESOLUTION, pygame.FULLSCREEN if FULLSCREEN else 0)
+pygame.display.set_caption(APP_NAME)
+# pygame.display.set_icon(pygame.image.load(ICON_LOCATION))  # Uncomment if an icon is present
+
+clock = pygame.time.Clock()
+delta_time = 0.0
+font = pygame.font.SysFont("Arial", 32)
 
 
 def timer(func):
@@ -91,21 +101,21 @@ def draw_line(screen, color, start_pos, end_pos, width=1):
 
 def distance_between_points(p1, p2):
     """
-    (7) Calculates the Euclidean distance between two points.
+    Calculates the Euclidean distance between two points.
     """
     return math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
 
 
 def random_float(min_value=0.0, max_value=1.0):
     """
-    (8) Generates a random float between a specified range.
+    Generates a random float between a specified range.
     """
     return random.uniform(min_value, max_value)
 
 
 def sign(value):
     """
-    (10) Returns the sign of a value (-1 for negative, 1 for positive, 0 for zero).
+    Returns the sign of a value (-1 for negative, 1 for positive, 0 for zero).
     """
     if value > 0:
         return 1
@@ -120,9 +130,6 @@ class Color:
         self.r, self.g, self.b = r, g, b
 
     def init_colors(self):
-        """
-        Initializes preset colors.
-        """
         self.BLACK = Color(0, 0, 0)
         self.DARK_GRAY = Color(85, 85, 85)
         self.LIGHT_GRAY = Color(170, 170, 170)
@@ -195,9 +202,23 @@ class Color:
         return f"R: {self.r}, G: {self.g}, B: {self.b}"
 
 
+# Colors Setup
+colors = Color()
+colors.init_colors()
+
+
 class Vector2:
     def __init__(self, x=0, y=0):
         self.x, self.y = x, y
+
+    def init_vectors(self):
+        self.ZERO = Vector2(0, 0)
+        self.ONE = Vector2(1, 1)
+        self.NEG_ONE = Vector2(-1, -1)
+        self.RIGHT = Vector2(1, 0)
+        self.LEFT = Vector2(-1, 0)
+        self.UP = Vector2(0, 1)
+        self.DOWN = Vector2(0, -1)
 
     def magnitude(self):
         """
@@ -277,6 +298,17 @@ class Vector3:
     def __init__(self, x=0, y=0, z=0):
         self.x, self.y, self.z = x, y, z
 
+    def init_vectors(self):
+        self.ZERO = Vector3(0, 0, 0)
+        self.ONE = Vector3(1, 1, 0)
+        self.NEG_ONE = Vector3(-1, -1, 0)
+        self.RIGHT = Vector3(1, 0, 0)
+        self.LEFT = Vector3(-1, 0, 0)
+        self.UP = Vector3(0, 1, 0)
+        self.DOWN = Vector3(0, -1, 0)
+        self.FORWARD = Vector3(0, 0, 1)
+        self.BACK = Vector3(0, 0, -1)
+
     def magnitude(self):
         """
         Returns the magnitude (length) of the vector.
@@ -340,13 +372,26 @@ class Vector3:
         return f"X: {self.x}, Y: {self.y}, Z: {self.z}"
 
 
+# Vector2 and Vector3 Setup
+vector2 = Vector2()
+vector2.init_vectors()
+
+vector3 = Vector3()
+vector3.init_vectors()
+
+
 class Rect:
     def __init__(self, position: Vector2, scale: Vector2):
         self.position = position
         self.scale = scale
 
     def get_pg_rect(self):
-        return self.position.x - self.scale.x // 2, self.position.y - self.scale.y // 2, self.scale.x, self.scale.y
+        return (
+            self.position.x - self.scale.x // 2,
+            self.position.y - self.scale.y // 2,
+            self.scale.x,
+            self.scale.y,
+        )
 
 
 class Circle:
@@ -360,13 +405,30 @@ class Grid:
         self.x, self.y = x, y
         self.grid = [[default_bg_color for _ in range(y)] for _ in range(x)]
 
-    def draw(self, surface, color, border_width):
-        for x in range(len(self.grid)):
-            for y in range(len(self.grid[x])):
-                width = WIDTH / x
-                height = HEIGHT / y
-                pygame.draw.rect(surface, self.grid[x][y].get_tup(), pygame.Rect(x * width, y * height, width, height))
-                pygame.draw.rect(surface, color.get_tup(), pygame.Rect(x * width, y * height, width, height), border_width)
+        self.cell_width = WIDTH / self.x
+        self.cell_height = HEIGHT / self.y
+
+        self.total_width = self.cell_width * self.x
+        self.total_height = self.cell_height * self.y
+
+        self.offset_x = (WIDTH - self.total_width) // 2
+        self.offset_y = (HEIGHT - self.total_height) // 2
+
+    def set_square(self, position, color):
+        self.grid[position.x][position.y] = color
+
+    def draw(self, surface: pygame.Surface, color: Color, border_width: int):
+        for x in range(self.x):
+            for y in range(self.y):
+                rect = pygame.Rect(
+                    self.offset_x + x * self.cell_width,
+                    self.offset_y + y * self.cell_height,
+                    self.cell_width,
+                    self.cell_height,
+                )
+
+                pygame.draw.rect(surface, self.grid[x][y].get_tup(), rect)
+                pygame.draw.rect(surface, color.get_tup(), rect, border_width)
 
 
 def rect_collision(rect1: Rect, rect2: Rect):
@@ -381,3 +443,14 @@ def circle_collsion(circle1: Circle, circle2: Circle):
         return False
 
     return True
+
+
+def run(start, update):
+    running = True
+
+    # Run the start function the first frame
+    start()
+
+    while running:
+        # Run the update function every frame
+        running = update()

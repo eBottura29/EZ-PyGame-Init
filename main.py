@@ -1,56 +1,33 @@
 import pygame
 from pg_utils import *
 
-#########
-# SETUP #
-#########
 
-# Vector2 and Vector3 Setup
-vector2 = Vector2()
-vector2.init_vectors()
-
-vector3 = Vector3()
-vector3.init_vectors()
-
-# Colors Setup
-colors = Color()
-colors.init_colors()
-
-# PyGame Setup
-pygame.init()
-SCREEN = pygame.display.set_mode(RESOLUTION, pygame.FULLSCREEN if FULLSCREEN else 0)
-pygame.display.set_caption(APP_NAME)
-# pygame.display.set_icon(pygame.image.load(ICON_LOCATION))  # Uncomment if an icon is present
-
-clock = pygame.time.Clock()
-delta_time = 0.0
-font = pygame.font.SysFont("Arial", 32)
-
-#############
-# END SETUP #
-#############
-
-
-def main():
-    global delta_time
-
-    running = True
+# This function executes at the start of the program
+def start():
+    global get_ticks_last_frame
     get_ticks_last_frame = 0.0
 
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
 
-        pygame.display.flip()
+# This function executes every frame
+def update() -> bool:
+    global get_ticks_last_frame, delta_time
 
-        get_ticks_last_frame, delta_time = manage_frame_rate(clock, get_ticks_last_frame)
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            return False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                return False
 
-    pygame.quit()
+    pygame.display.flip()
+
+    get_ticks_last_frame, delta_time = manage_frame_rate(clock, get_ticks_last_frame)
+
+    return True
 
 
+# Run the program
 if __name__ == "__main__":
-    main()
+    run(start, update)
+    pygame.quit()
